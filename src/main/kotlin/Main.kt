@@ -11,7 +11,7 @@ import java.security.MessageDigest
 
 
 fun main(args: Array<String>) {
-    val fileName = "/home/incognito/Downloads/Resume.pdf"
+    val fileName = "<file-path>"
 
     //getting the size in bytes
     val path: Path = Paths.get(fileName)
@@ -24,8 +24,12 @@ fun main(args: Array<String>) {
     //getting the JSON payload
     val postPayload = jsonPayload(checksum, "<filename>", sizeInBytes)
     val jobData = mapOf("job" to postPayload)
+    
+    //getting the file
     val files = listOf(File("<filepath>").fileLike())
-    val response = khttp.post("localhost:8080/api/job", files = files, data = jobData)
+    
+    //executing the POST request
+    val response = khttp.post("<address>/api/job", files = files, data = jobData)
     print(response.text)
 
 }
@@ -53,14 +57,11 @@ fun jsonPayload(checkSum: String, fileName: String, fileSize: Long): JSONObject 
     val srcFilesItems = JSONObject()
     val srcFilesArray = JSONArray()
 
-    reqSpecItems.put("type", "PDF_TO_IMAGES")
-    reqSpecItems.put("imageType", "JPEG")
-    reqSpecItems.put("pageNumbers", "1")
-    reqSpecItems.put("defaultPageScaling", 1)
+    reqSpecItems.put("type", "HTML_TO_PDF")
     reqSpec.put("request", reqSpecItems)
 
     srcFilesItems.put("checksum", checkSum)
-    srcFilesItems.put("fileType", "application/pdf")
+    srcFilesItems.put("fileType", "text/html")
     srcFilesItems.put("fileSize", fileSize)
     srcFilesItems.put("fileName", fileName)
 
@@ -81,4 +82,3 @@ fun downloadResult(jobID: String){
     val jpegData : ByteArray = response.content
     //write your saving logic here
 }
-
