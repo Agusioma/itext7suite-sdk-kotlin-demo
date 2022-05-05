@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
     val postPayload = jsonPayload(checksum, "<filename>", sizeInBytes)
     val jobData = mapOf("job" to postPayload)
     val files = listOf(File("<filepath>").fileLike())
-    val response = khttp.post("<address>/api/job", files = files, data = jobData)
+    val response = khttp.post("localhost:8080/api/job", files = files, data = jobData)
     print(response.text)
 
 }
